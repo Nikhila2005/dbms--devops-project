@@ -1,88 +1,61 @@
 # Placement Management System
 
-A full-stack web application for managing student placements and company drives.
+A full-stack application for managing student placements and company drives.
 
 ## Project Structure
 
 ```
-├── backend/                 # Backend API server
-│   ├── routes/             # API route handlers
-│   ├── sql/                # Database schema and scripts
-│   ├── server.js           # Main server file
-│   ├── db.js              # Database connection
-│   ├── package.json        # Backend dependencies
-│   └── node_modules/       # Backend dependencies
-├── frontend/               # Frontend static files
-│   ├── public/             # HTML pages
-│   ├── images/             # Static images
-│   ├── script.js           # Client-side JavaScript
-│   └── package.json        # Frontend package info
-└── package.json            # Root package.json for easy deployment
+backend/                  # Node.js API server
+├── routes/              # API endpoints (auth, company, drive, student, application)
+├── sql/                 # Database schema
+├── server.js            # Main server
+└── db.js                # Database config
+
+frontend/                # Static web pages
+├── public/              # HTML pages
+├── script.js            # Client-side logic
+└── images/              # Assets
 ```
 
 ## Quick Start
 
-### Option 1: Run Everything Together (Recommended)
 ```bash
-# Install all dependencies
+# Install and start everything
 npm run install-all
-
-# Start the application
 npm start
 ```
 
-### Option 2: Run Backend and Frontend Separately
-
-#### Backend Only
+**OR** run separately:
 ```bash
-cd backend
-npm install
-npm start
+cd backend && npm install && npm start    # http://localhost:3000
 ```
 
-#### Frontend Only
-The frontend consists of static files. You can serve them using:
-- The backend server (serves frontend automatically)
-- Any static file server (nginx, Apache, etc.)
-- Live Server extension in VS Code
+Frontend is served by backend or via any static server.
 
-## Deployment
+## Configuration
 
-### Backend Deployment
-1. Navigate to the `backend` folder
-2. Install dependencies: `npm install`
-3. Start the server: `npm start`
-4. The server will run on `http://localhost:3000`
-
-### Frontend Deployment
-The frontend files are static and can be deployed to:
-- **Static hosting**: Netlify, Vercel, GitHub Pages
-- **CDN**: AWS CloudFront, Cloudflare
-- **Web server**: nginx, Apache
-
-### Full Stack Deployment
-1. Deploy backend to a cloud service (Heroku, AWS, DigitalOcean)
-2. Deploy frontend to a static hosting service
-3. Update API endpoints in frontend to point to your backend URL
+- Backend: Configure database in `backend/db.js`
+- Database: Run `backend/sql/schema.sql` on your MySQL instance
+- Frontend: Update API endpoints if backend is remote
 
 ## API Endpoints
 
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/signin` - User login
-- `GET /api/company` - Company operations
-- `GET /api/drives` - Drive management
-- `GET /api/applications` - Application handling
-- `GET /api/students` - Student operations
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| POST | `/api/auth/signup` | User registration |
+| POST | `/api/auth/signin` | User login |
+| GET/POST | `/api/company` | Company management |
+| GET/POST | `/api/drives` | Drive operations |
+| GET/POST | `/api/applications` | Application handling |
+| GET/POST | `/api/students` | Student operations |
 
-## Database Setup
+## Deployment
 
-1. Create a MySQL database
-2. Run the SQL scripts from `backend/sql/schema.sql`
-3. Update database connection details in `backend/db.js`
+**Backend**: Deploy to cloud service (Heroku, AWS, Vercel)
+**Frontend**: Deploy to static hosting (Netlify, Vercel, GitHub Pages) or serve via backend
 
-## Development
+## Tech Stack
 
-- Backend runs on port 3000
-- Frontend is served statically by the backend
-- All API calls are prefixed with `/api/`
-- CORS is enabled for cross-origin requests
+- **Backend**: Node.js, Express
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: MySQL

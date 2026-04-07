@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Sign Up</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>
+      <span class="material-icons" style="font-size: 2.5rem; margin-right: 0.5rem; vertical-align: middle;">person_add</span>
+      Student Sign Up
+    </h1>
+    <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">Join the placement portal and start your career journey</p>
+  </header>
+  
+  <main>
+    <form id="signupForm" class="card">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">person</span>
+        Create Your Account
+      </h2>
+      
+      <div class="form-group">
+        <label for="name" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">person</span>
+          Full Name
+        </label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="email" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">email</span>
+          Email Address
+        </label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="department" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">school</span>
+          Department
+        </label>
+        <input type="text" id="department" name="department" placeholder="e.g., Computer Science, Electronics" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="cgpa" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">grade</span>
+          CGPA
+        </label>
+        <input type="number" id="cgpa" name="cgpa" step="0.01" min="0" max="10" placeholder="Enter your CGPA (0.00 - 10.00)" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="password" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">lock</span>
+          Password
+        </label>
+        <input type="password" id="password" name="password" placeholder="Create a strong password" required />
+      </div>
+      
+      <button type="submit" class="btn">
+        <span class="material-icons">person_add</span>
+        Create Account
+      </button>
+      
+      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
+        <p style="color: var(--gray-600); margin: 0;">
+          Already have an account? 
+          <a href="signin.html" style="color: var(--primary-600); text-decoration: none; font-weight: 500;">Sign in here</a>
+        </p>
+      </div>
+    </form>
+  </main>
+  
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating Account...';
+      submitBtn.disabled = true;
+      
+      try {
+        const data = Object.fromEntries(new FormData(this));
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        if (!res.ok) {
+          alert(result.message || 'Signup failed');
+          return;
+        }
+        
+        // Success animation
+        submitBtn.innerHTML = '<span class="material-icons">check</span> Account Created!';
+        submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+        
+        setTimeout(() => {
+          window.location.href = 'signin.html';
+        }, 1500);
+        
+      } catch (error) {
+        console.error('Signup error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    });
+    
+    // Real-time validation
+    document.getElementById('cgpa').addEventListener('input', function() {
+      const value = parseFloat(this.value);
+      if (value < 0 || value > 10) {
+        this.setCustomValidity('CGPA must be between 0.00 and 10.00');
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

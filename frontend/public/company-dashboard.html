@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Company Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>
+      <span class="material-icons" style="font-size: 2.5rem; margin-right: 0.5rem; vertical-align: middle;">business_center</span>
+      Company Dashboard
+    </h1>
+    <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">Manage your placement drives and student applications</p>
+  </header>
+  
+  <main>
+    <div class="tab">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">assignment</span>
+        Student Applications
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">Review and manage student applications for your placement drives.</p>
+      
+      <div id="applications-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;"></div>
+      
+      <div id="no-applications" style="text-align: center; padding: 3rem; color: var(--gray-500); display: none;">
+        <span class="material-icons" style="font-size: 4rem; display: block; margin-bottom: 1rem;">assignment_turned_in</span>
+        <h3 style="margin: 0 0 0.5rem 0;">No Applications Yet</h3>
+        <p style="margin: 0;">Create placement drives to start receiving applications from students.</p>
+      </div>
+    </div>
+    
+    <div class="tab" style="margin-top: 2rem;">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">add_circle</span>
+        Create Placement Drive
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">Set up a new placement drive to attract student applications.</p>
+      
+      <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form id="create-drive-form">
+          <div class="form-group">
+            <label for="driveDate" class="form-label">
+              <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">event</span>
+              Drive Date
+            </label>
+            <input type="date" id="driveDate" name="driveDate" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="venue" class="form-label">
+              <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">location_on</span>
+              Venue
+            </label>
+            <input type="text" id="venue" name="venue" placeholder="Enter the venue for the placement drive" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="eligibility" class="form-label">
+              <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">grade</span>
+              Eligibility Criteria
+            </label>
+            <input type="text" id="eligibility" name="eligibility" placeholder="e.g., CGPA >= 7.0, Computer Science students" required />
+          </div>
+          
+          <button type="submit" class="btn">
+            <span class="material-icons">add</span>
+            Create Drive
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    // Redirect to login if not logged in
+    if (!localStorage.getItem('companyId')) {
+      window.location.href = 'company-login.html';
+    }
+
+    const companyId = localStorage.getItem('companyId');
+
+    async function fetchApplications() {
+      try {
+        const res = await fetch(`/api/company/applications/${companyId}`);
+        const apps = await res.json();
+        const container = document.getElementById('applications-list');
+        const noApplications = document.getElementById('no-applications');
+        
+        container.innerHTML = '';
+        
+        if (apps.length === 0) {
+          noApplications.style.display = 'block';
+          return;
+        }
+        
+        noApplications.style.display = 'none';
+        
+        apps.forEach(app => {
+          const card = document.createElement('div');
+          card.style.cssText = `
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+          `;
+          
+          const statusColor = app.Status === 'Selected' ? 'var(--success-500)' : 
+                             app.Status === 'Rejected' ? 'var(--error-500)' : 'var(--warning-500)';
+          
+          card.innerHTML = `
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+              <span class="material-icons" style="color: var(--primary-500); font-size: 2rem; margin-right: 0.75rem;">person</span>
+              <div style="flex: 1;">
+                <h3 style="margin: 0; color: var(--gray-900); font-size: 1.25rem;">${app.StudentName}</h3>
+                <p style="margin: 0; color: var(--gray-600); font-size: 0.9rem;">${app.StudentEmail}</p>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">event</span>
+                <span style="color: var(--gray-700);">Drive Date: ${new Date(app.DriveDate).toLocaleDateString()}</span>
+              </div>
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">location_on</span>
+                <span style="color: var(--gray-700);">Venue: ${app.Venue}</span>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">schedule</span>
+                <span style="color: var(--gray-700);">Applied: ${new Date(app.ApplicationDate).toLocaleDateString()}</span>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: var(--gray-700);">
+                Status:
+              </label>
+              <select onchange="updateStatus(${app.StudentID}, ${app.DriveID}, this.value)" style="flex: 1; padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: var(--radius-md); background: white;">
+                <option value="Applied" ${app.Status === 'Applied' ? 'selected' : ''}>Applied</option>
+                <option value="Selected" ${app.Status === 'Selected' ? 'selected' : ''}>Selected</option>
+                <option value="Rejected" ${app.Status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+              </select>
+            </div>
+          `;
+          
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+        document.getElementById('no-applications').style.display = 'block';
+      }
+    }
+
+    async function updateStatus(studentId, driveId, status) {
+      try {
+        const res = await fetch(`/api/company/application/status/${studentId}/${driveId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        
+        if (res.ok) {
+          // Show success feedback
+          const select = event.target;
+          const originalValue = select.value;
+          select.style.background = 'var(--success-50)';
+          select.style.borderColor = 'var(--success-500)';
+          
+          setTimeout(() => {
+            select.style.background = '';
+            select.style.borderColor = '';
+            fetchApplications(); // Refresh the list
+          }, 1000);
+        } else {
+          alert('Failed to update status');
+        }
+      } catch (error) {
+        console.error('Error updating status:', error);
+        alert('An error occurred while updating status');
+      }
+    }
+
+    // Create drive form
+    document.getElementById('create-drive-form').onsubmit = async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Creating...';
+      submitBtn.disabled = true;
+      
+      try {
+        const companyId = localStorage.getItem('companyId');
+        const form = e.target;
+        const data = {
+          companyId,
+          driveDate: form.driveDate.value,
+          venue: form.venue.value,
+          eligibility: form.eligibility.value
+        };
+        
+        const res = await fetch('/api/drives', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        if (res.ok) {
+          // Success animation
+          submitBtn.innerHTML = '<span class="material-icons">check</span> Drive Created!';
+          submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+          
+          setTimeout(() => {
+            form.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+          }, 2000);
+        } else {
+          alert('Failed to create drive');
+        }
+      } catch (error) {
+        console.error('Error creating drive:', error);
+        alert('An error occurred while creating the drive');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    };
+
+    // Load applications on page load
+    fetchApplications();
+  </script>
+   <script src="script.js"></script>
+</body>
+</html>

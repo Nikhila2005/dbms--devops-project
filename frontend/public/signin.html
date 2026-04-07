@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Sign In</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>
+      <span class="material-icons" style="font-size: 2.5rem; margin-right: 0.5rem; vertical-align: middle;">login</span>
+      Student Sign In
+    </h1>
+    <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">Welcome back! Please sign in to continue</p>
+  </header>
+  
+  <main>
+    <form id="signinForm" class="card">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">account_circle</span>
+        Sign In to Your Account
+      </h2>
+      
+      <div class="form-group">
+        <label for="email" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">email</span>
+          Email Address
+        </label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="password" class="form-label">
+          <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">lock</span>
+          Password
+        </label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+      </div>
+      
+      <button type="submit" class="btn">
+        <span class="material-icons">login</span>
+        Sign In
+      </button>
+      
+      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
+        <p style="color: var(--gray-600); margin: 0;">
+          Don't have an account? 
+          <a href="signup.html" style="color: var(--primary-600); text-decoration: none; font-weight: 500;">Sign up here</a>
+        </p>
+      </div>
+    </form>
+  </main>
+  
+  <script>
+    document.getElementById('signinForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Signing In...';
+      submitBtn.disabled = true;
+      
+      try {
+        const data = Object.fromEntries(new FormData(this));
+        const res = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        if (!res.ok) { 
+          alert(result.message || 'Signin failed'); 
+          return; 
+        }
+        
+        // Store user info
+        localStorage.setItem('studentId', result.student.StudentID);
+        localStorage.setItem('userName', result.student.Name);
+        localStorage.setItem('userEmail', result.student.Email);
+        
+        // Success animation
+        submitBtn.innerHTML = '<span class="material-icons">check</span> Success!';
+        submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+        
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1000);
+        
+      } catch (error) {
+        console.error('Signin error:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

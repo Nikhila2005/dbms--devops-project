@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a href="#home" class="active" id="nav-home">Home</a>
+    <a href="#companies" id="nav-companies">Companies</a>
+    <a href="#applications" id="nav-applications">Applications</a>
+    <a href="#interviews" id="nav-interviews">Interviews</a>
+    <div class="nav-icons">
+      <button id="profileBtn" title="My Profile">
+        <span class="material-icons">person</span>
+      </button>
+      <button id="settingsBtn" title="Settings">
+        <span class="material-icons">settings</span>
+      </button>
+      <button id="logoutBtn" title="Logout">
+        <span class="material-icons">logout</span>
+      </button>
+    </div>
+  </header>
+  <main class="content">
+    <div id="home" class="tab">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">home</span>
+        Welcome, <span id="user-name"></span>!
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">Your placement journey starts here. Use the menu to navigate and explore opportunities.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        <div style="padding: 1.5rem; background: linear-gradient(135deg, var(--primary-50), var(--primary-100)); border-radius: var(--radius-xl); border: 1px solid var(--primary-200);">
+          <span class="material-icons" style="color: var(--primary-600); font-size: 2.5rem; display: block; margin-bottom: 1rem;">business</span>
+          <h3 style="margin: 0 0 0.5rem 0; color: var(--primary-800);">Browse Companies</h3>
+          <p style="margin: 0; color: var(--primary-700); font-size: 0.9rem;">Discover placement drives and apply for opportunities</p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: linear-gradient(135deg, var(--success-50), var(--success-100)); border-radius: var(--radius-xl); border: 1px solid var(--success-200);">
+          <span class="material-icons" style="color: var(--success-600); font-size: 2.5rem; display: block; margin-bottom: 1rem;">assignment</span>
+          <h3 style="margin: 0 0 0.5rem 0; color: var(--success-800);">Track Applications</h3>
+          <p style="margin: 0; color: var(--success-700); font-size: 0.9rem;">Monitor your application status and progress</p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: linear-gradient(135deg, var(--warning-50), var(--warning-100)); border-radius: var(--radius-xl); border: 1px solid var(--warning-200);">
+          <span class="material-icons" style="color: var(--warning-600); font-size: 2.5rem; display: block; margin-bottom: 1rem;">event</span>
+          <h3 style="margin: 0 0 0.5rem 0; color: var(--warning-800);">Upcoming Interviews</h3>
+          <p style="margin: 0; color: var(--warning-700); font-size: 0.9rem;">Stay updated with your interview schedule</p>
+        </div>
+      </div>
+    </div>
+    <div id="companies" class="tab" style="display:none;">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">business</span>
+        Available Companies
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">Browse through available placement drives and apply to companies that match your profile.</p>
+      
+      <div id="company-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;"></div>
+      
+      <div id="no-companies" style="text-align: center; padding: 3rem; color: var(--gray-500); display: none;">
+        <span class="material-icons" style="font-size: 4rem; display: block; margin-bottom: 1rem;">business_center</span>
+        <h3 style="margin: 0 0 0.5rem 0;">No Companies Available</h3>
+        <p style="margin: 0;">Check back later for new placement drives.</p>
+      </div>
+    </div>
+    <div id="applications" class="tab" style="display:none;">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">assignment</span>
+        Your Applications
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">Track the status of your job applications and stay updated on your progress.</p>
+      
+      <div id="application-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;"></div>
+      
+      <div id="no-applications" style="text-align: center; padding: 3rem; color: var(--gray-500); display: none;">
+        <span class="material-icons" style="font-size: 4rem; display: block; margin-bottom: 1rem;">assignment_turned_in</span>
+        <h3 style="margin: 0 0 0.5rem 0;">No Applications Yet</h3>
+        <p style="margin: 0;">Start applying to companies to see your applications here.</p>
+      </div>
+    </div>
+    
+    <div id="interviews" class="tab" style="display:none;">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">event</span>
+        Application Status
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">View the current status of all your applications and upcoming interviews.</p>
+      
+      <div id="interview-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;"></div>
+      
+      <div id="no-interviews" style="text-align: center; padding: 3rem; color: var(--gray-500); display: none;">
+        <span class="material-icons" style="font-size: 4rem; display: block; margin-bottom: 1rem;">event_note</span>
+        <h3 style="margin: 0 0 0.5rem 0;">No Applications Yet</h3>
+        <p style="margin: 0;">Apply to companies to track your interview status here.</p>
+      </div>
+    </div>
+    <div id="profile" class="tab" style="display:none;">
+      <h2>My Profile</h2>
+      <p>Student Name: <span id="profile-name"></span></p>
+      <p>Email: <span id="profile-email"></span></p>
+    </div>
+    <div id="settings" class="tab" style="display:none;">
+      <h2>
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">settings</span>
+        Account Settings
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem;">Manage your account information and preferences.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+        <!-- Profile Information Card -->
+        <div class="card">
+          <h3 style="display: flex; align-items: center; margin-bottom: 1.5rem; color: var(--gray-800);">
+            <span class="material-icons" style="color: var(--primary-500); margin-right: 0.5rem;">person</span>
+            Profile Information
+          </h3>
+          
+          <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+              <span class="material-icons" style="color: var(--gray-500); margin-right: 0.5rem;">badge</span>
+              <span style="font-weight: 500;">Name:</span>
+              <span style="margin-left: 0.5rem; color: var(--gray-700);" id="current-name"></span>
+            </div>
+            <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+              <span class="material-icons" style="color: var(--gray-500); margin-right: 0.5rem;">email</span>
+              <span style="font-weight: 500;">Email:</span>
+              <span style="margin-left: 0.5rem; color: var(--gray-700);" id="current-email"></span>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <span class="material-icons" style="color: var(--gray-500); margin-right: 0.5rem;">school</span>
+              <span style="font-weight: 500;">Department:</span>
+              <span style="margin-left: 0.5rem; color: var(--gray-700);" id="current-department"></span>
+            </div>
+          </div>
+          
+          <button class="btn" id="edit-profile-btn">
+            <span class="material-icons">edit</span>
+            Edit Profile
+          </button>
+          
+          <div id="edit-profile-section" style="display:none; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
+            <form id="edit-profile-form">
+              <div class="form-group">
+                <label for="edit-name" class="form-label">
+                  <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">person</span>
+                  Full Name
+                </label>
+                <input type="text" id="edit-name" name="name" placeholder="Enter your full name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-department" class="form-label">
+                  <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">school</span>
+                  Department
+                </label>
+                <input type="text" id="edit-department" name="department" placeholder="e.g., Computer Science" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="edit-cgpa" class="form-label">
+                  <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">grade</span>
+                  CGPA
+                </label>
+                <input type="number" id="edit-cgpa" name="cgpa" step="0.01" min="0" max="10" placeholder="Enter your CGPA" required>
+              </div>
+              
+              <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn">
+                  <span class="material-icons">save</span>
+                  Save Changes
+                </button>
+                <button type="button" class="btn btn-secondary" id="cancel-edit-profile">
+                  <span class="material-icons">cancel</span>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Security Settings Card -->
+        <div class="card">
+          <h3 style="display: flex; align-items: center; margin-bottom: 1.5rem; color: var(--gray-800);">
+            <span class="material-icons" style="color: var(--primary-500); margin-right: 0.5rem;">security</span>
+            Security Settings
+          </h3>
+          
+          <form id="change-password-form" style="margin-bottom: 2rem;">
+            <h4 style="color: var(--gray-700); margin-bottom: 1rem;">Change Password</h4>
+            <div class="form-group">
+              <label for="old-password" class="form-label">
+                <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">lock</span>
+                Current Password
+              </label>
+              <input type="password" id="old-password" name="oldPassword" placeholder="Enter your current password" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="new-password" class="form-label">
+                <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">lock_outline</span>
+                New Password
+              </label>
+              <input type="password" id="new-password" name="newPassword" placeholder="Enter your new password" required>
+            </div>
+            
+            <button type="submit" class="btn">
+              <span class="material-icons">vpn_key</span>
+              Change Password
+            </button>
+          </form>
+          
+          <form id="update-email-form">
+            <h4 style="color: var(--gray-700); margin-bottom: 1rem;">Update Email</h4>
+            <div class="form-group">
+              <label for="new-email" class="form-label">
+                <span class="material-icons" style="font-size: 1rem; margin-right: 0.25rem; vertical-align: middle;">email</span>
+                New Email Address
+              </label>
+              <input type="email" id="new-email" name="newEmail" placeholder="Enter your new email address" required>
+            </div>
+            
+            <button type="submit" class="btn">
+              <span class="material-icons">mark_email_read</span>
+              Update Email
+            </button>
+          </form>
+        </div>
+        
+        <!-- Account Actions Card -->
+        <div class="card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+          <h3 style="display: flex; align-items: center; margin-bottom: 1.5rem; color: var(--gray-800);">
+            <span class="material-icons" style="color: var(--error-500); margin-right: 0.5rem;">warning</span>
+            Danger Zone
+          </h3>
+          
+          <div style="background: var(--error-50); border: 1px solid var(--error-200); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <h4 style="color: var(--error-800); margin-bottom: 0.5rem;">Delete Account</h4>
+            <p style="color: var(--error-700); margin-bottom: 1.5rem; font-size: 0.9rem;">
+              Once you delete your account, there is no going back. Please be certain.
+            </p>
+            
+            <button class="btn btn-danger" id="delete-account-btn">
+              <span class="material-icons">delete_forever</span>
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Get user info from localStorage
+    const studentId = localStorage.getItem('studentId');
+    const userName = localStorage.getItem('userName');
+    document.getElementById('user-name').innerText = userName || 'Student';
+
+    if (!studentId) {
+      alert('Student ID not found in localStorage.');
+    }
+
+    // Navigation for main tabs
+    document.querySelectorAll('.navbar a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
+        document.querySelectorAll('.navbar a').forEach(a => a.classList.remove('active'));
+        const id = link.id.replace('nav-', '');
+        document.getElementById(id).style.display = 'block';
+        link.classList.add('active');
+        loadTab(id);
+      });
+    });
+
+    // Icon button navigation
+    document.getElementById('logoutBtn').onclick = function() {
+      localStorage.clear();
+      window.location.href = 'signin.html';
+    };
+    document.getElementById('profileBtn').onclick = function() {
+      document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
+      document.querySelectorAll('.navbar a').forEach(a => a.classList.remove('active'));
+      document.getElementById('profile').style.display = 'block';
+      document.getElementById('profile-name').innerText = localStorage.getItem('userName') || '';
+      document.getElementById('profile-email').innerText = localStorage.getItem('userEmail') || '';
+    };
+    document.getElementById('settingsBtn').onclick = function() {
+      document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
+      document.querySelectorAll('.navbar a').forEach(a => a.classList.remove('active'));
+      document.getElementById('settings').style.display = 'block';
+      
+      // Load current profile information
+      document.getElementById('current-name').textContent = localStorage.getItem('userName') || 'Not set';
+      document.getElementById('current-email').textContent = localStorage.getItem('userEmail') || 'Not set';
+      document.getElementById('current-department').textContent = localStorage.getItem('userDepartment') || 'Not set';
+    };
+
+    // Tab loader
+    function loadTab(tab) {
+      if (tab === 'companies') fetchCompanies();
+      if (tab === 'applications') fetchApplications();
+      if (tab === 'interviews') fetchInterviews();
+    }
+
+    // Fetch companies (placement drives)
+    async function fetchCompanies() {
+      try {
+        const res = await fetch('/api/drives');
+        const drives = await res.json();
+        const container = document.getElementById('company-list');
+        const noCompanies = document.getElementById('no-companies');
+        
+        container.innerHTML = '';
+        
+        if (drives.length === 0) {
+          noCompanies.style.display = 'block';
+          return;
+        }
+        
+        noCompanies.style.display = 'none';
+        
+        drives.forEach(d => {
+          const card = document.createElement('div');
+          card.style.cssText = `
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+          `;
+          
+          card.innerHTML = `
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+              <span class="material-icons" style="color: var(--primary-500); font-size: 2rem; margin-right: 0.75rem;">business</span>
+              <div>
+                <h3 style="margin: 0; color: var(--gray-900); font-size: 1.25rem;">${d.CompanyName || d.Name || 'Unnamed Company'}</h3>
+                <p style="margin: 0; color: var(--gray-600); font-size: 0.9rem;">Placement Drive</p>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">event</span>
+                <span style="color: var(--gray-700);">${new Date(d.DriveDate).toLocaleDateString()}</span>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">location_on</span>
+                <span style="color: var(--gray-700);">${d.Venue}</span>
+              </div>
+            </div>
+            
+            <button class="btn" style="width: 100%; margin: 0;">
+              <span class="material-icons">send</span>
+              Apply Now
+            </button>
+          `;
+          
+          // Add hover effect
+          card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-4px)';
+            card.style.boxShadow = 'var(--shadow-lg)';
+            card.style.borderColor = 'var(--primary-300)';
+          });
+          
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = 'var(--shadow-sm)';
+            card.style.borderColor = 'var(--gray-200)';
+          });
+          
+          // Apply button functionality
+          const applyBtn = card.querySelector('button');
+          applyBtn.onclick = async () => {
+            applyBtn.innerHTML = '<span class="spinner"></span> Applying...';
+            applyBtn.disabled = true;
+            
+            try {
+              const response = await fetch('/api/applications/apply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  studentId,
+                  driveId: d.DriveID,
+                  applicationDate: new Date().toISOString().split('T')[0]
+                })
+              });
+              
+              if (!response.ok) {
+                const error = await response.text();
+                alert('Failed to apply: ' + error);
+                return;
+              }
+              
+              applyBtn.innerHTML = '<span class="material-icons">check</span> Applied!';
+              applyBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+              applyBtn.disabled = true;
+              
+              setTimeout(() => {
+                document.querySelector('#nav-applications').click();
+              }, 1000);
+              
+            } catch (error) {
+              console.error('Apply error:', error);
+              alert('An error occurred while applying');
+              applyBtn.innerHTML = '<span class="material-icons">send</span> Apply Now';
+              applyBtn.disabled = false;
+            }
+          };
+          
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error loading companies:', err);
+        document.getElementById('no-companies').style.display = 'block';
+      }
+    }
+
+    // Fetch applications
+    async function fetchApplications() {
+      const container = document.getElementById('application-list');
+      const noApplications = document.getElementById('no-applications');
+      
+      container.innerHTML = '';
+      
+      try {
+        const res = await fetch(`/api/applications/student/${studentId}`);
+        if (!res.ok) {
+          const error = await res.text();
+          console.error('Failed to fetch applications:', error);
+          noApplications.style.display = 'block';
+          return;
+        }
+        
+        const apps = await res.json();
+        
+        if (apps.length === 0) {
+          noApplications.style.display = 'block';
+          return;
+        }
+        
+        noApplications.style.display = 'none';
+        
+        apps.forEach(a => {
+          const card = document.createElement('div');
+          card.style.cssText = `
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+          `;
+          
+          const statusColor = a.Status === 'Selected' ? 'var(--success-500)' : 
+                             a.Status === 'Rejected' ? 'var(--error-500)' : 'var(--warning-500)';
+          
+          card.innerHTML = `
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+              <span class="material-icons" style="color: var(--primary-500); font-size: 2rem; margin-right: 0.75rem;">assignment</span>
+              <div style="flex: 1;">
+                <h3 style="margin: 0; color: var(--gray-900); font-size: 1.25rem;">${a.CompanyName || 'Unnamed Company'}</h3>
+                <p style="margin: 0; color: var(--gray-600); font-size: 0.9rem;">Application Submitted</p>
+              </div>
+              <span class="status-badge" style="background: ${statusColor}; color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 500;">
+                ${a.Status}
+              </span>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">event</span>
+                <span style="color: var(--gray-700);">Drive Date: ${new Date(a.DriveDate).toLocaleDateString()}</span>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">schedule</span>
+                <span style="color: var(--gray-700);">Applied: ${new Date(a.ApplicationDate).toLocaleDateString()}</span>
+              </div>
+            </div>
+          `;
+          
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error loading applications:', err);
+        noApplications.style.display = 'block';
+      }
+    }
+
+    // Fetch interviews (show all applications with status)
+    async function fetchInterviews() {
+      const container = document.getElementById('interview-list');
+      const noInterviews = document.getElementById('no-interviews');
+      
+      container.innerHTML = '';
+      
+      try {
+        const res = await fetch(`/api/applications/student/${studentId}`);
+        if (!res.ok) {
+          const error = await res.text();
+          console.error('Failed to fetch interviews:', error);
+          noInterviews.style.display = 'block';
+          return;
+        }
+        
+        const apps = await res.json();
+        
+        if (apps.length === 0) {
+          noInterviews.style.display = 'block';
+          return;
+        }
+        
+        noInterviews.style.display = 'none';
+        
+        apps.forEach(app => {
+          const card = document.createElement('div');
+          card.style.cssText = `
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+          `;
+          
+          const statusColor = app.Status === 'Selected' ? 'var(--success-500)' : 
+                             app.Status === 'Rejected' ? 'var(--error-500)' : 'var(--warning-500)';
+          
+          const statusIcon = app.Status === 'Selected' ? 'check_circle' : 
+                            app.Status === 'Rejected' ? 'cancel' : 'schedule';
+          
+          card.innerHTML = `
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+              <span class="material-icons" style="color: ${statusColor}; font-size: 2rem; margin-right: 0.75rem;">${statusIcon}</span>
+              <div style="flex: 1;">
+                <h3 style="margin: 0; color: var(--gray-900); font-size: 1.25rem;">${app.CompanyName || 'Unnamed Company'}</h3>
+                <p style="margin: 0; color: var(--gray-600); font-size: 0.9rem;">Application Status</p>
+              </div>
+              <span class="status-badge" style="background: ${statusColor}; color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 500;">
+                ${app.Status}
+              </span>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">event</span>
+                <span style="color: var(--gray-700);">Drive Date: ${new Date(app.DriveDate).toLocaleDateString()}</span>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <span class="material-icons" style="color: var(--gray-500); font-size: 1.2rem; margin-right: 0.5rem;">schedule</span>
+                <span style="color: var(--gray-700);">Applied: ${new Date(app.ApplicationDate).toLocaleDateString()}</span>
+              </div>
+            </div>
+            
+            ${app.Status === 'Selected' ? 
+              '<div style="background: var(--success-50); border: 1px solid var(--success-200); border-radius: var(--radius-md); padding: 1rem; text-align: center;"><span class="material-icons" style="color: var(--success-600); margin-right: 0.5rem;">celebration</span><strong style="color: var(--success-800);">Congratulations! You have been selected!</strong></div>' : 
+              app.Status === 'Rejected' ? 
+              '<div style="background: var(--error-50); border: 1px solid var(--error-200); border-radius: var(--radius-md); padding: 1rem; text-align: center;"><span class="material-icons" style="color: var(--error-600); margin-right: 0.5rem;">info</span><span style="color: var(--error-800);">Application not selected this time. Keep applying!</span></div>' :
+              '<div style="background: var(--warning-50); border: 1px solid var(--warning-200); border-radius: var(--radius-md); padding: 1rem; text-align: center;"><span class="material-icons" style="color: var(--warning-600); margin-right: 0.5rem;">hourglass_empty</span><span style="color: var(--warning-800);">Application under review</span></div>'
+            }
+          `;
+          
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error loading interviews:', err);
+        noInterviews.style.display = 'block';
+      }
+    }
+
+
+    // Edit Profile
+    document.getElementById('edit-profile-btn').onclick = function() {
+      const section = document.getElementById('edit-profile-section');
+      const isVisible = section.style.display !== 'none';
+      
+      if (isVisible) {
+        section.style.display = 'none';
+        this.innerHTML = '<span class="material-icons">edit</span> Edit Profile';
+      } else {
+        section.style.display = 'block';
+        this.innerHTML = '<span class="material-icons">close</span> Cancel';
+        
+        // Pre-fill form with current values
+        document.querySelector('#edit-profile-form [name="name"]').value = localStorage.getItem('userName') || '';
+        document.querySelector('#edit-profile-form [name="department"]').value = localStorage.getItem('userDepartment') || '';
+        document.querySelector('#edit-profile-form [name="cgpa"]').value = localStorage.getItem('userCGPA') || '';
+      }
+    };
+
+    // Cancel edit profile
+    document.getElementById('cancel-edit-profile').onclick = function() {
+      document.getElementById('edit-profile-section').style.display = 'none';
+      document.getElementById('edit-profile-btn').innerHTML = '<span class="material-icons">edit</span> Edit Profile';
+    };
+
+    document.getElementById('edit-profile-form').onsubmit = async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+      submitBtn.disabled = true;
+      
+      try {
+        const name = this.name.value;
+        const department = this.department.value;
+        const cgpa = this.cgpa.value;
+        
+        const res = await fetch(`/api/students/${studentId}`, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ name, department, cgpa })
+        });
+        
+        if (res.ok) {
+          // Update localStorage
+          localStorage.setItem('userName', name);
+          localStorage.setItem('userDepartment', department);
+          localStorage.setItem('userCGPA', cgpa);
+          
+          // Update display
+          document.getElementById('current-name').textContent = name;
+          document.getElementById('current-department').textContent = department;
+          document.getElementById('profile-name').innerText = name;
+          document.getElementById('user-name').innerText = name;
+          
+          // Success animation
+          submitBtn.innerHTML = '<span class="material-icons">check</span> Saved!';
+          submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+          
+          setTimeout(() => {
+            document.getElementById('edit-profile-section').style.display = 'none';
+            document.getElementById('edit-profile-btn').innerHTML = '<span class="material-icons">edit</span> Edit Profile';
+            this.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+          }, 1500);
+        } else {
+          alert('Failed to update profile');
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('An error occurred while updating profile');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    };
+
+    // Change Password
+    document.getElementById('change-password-form').onsubmit = async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Updating...';
+      submitBtn.disabled = true;
+      
+      try {
+        const oldPassword = this.oldPassword.value;
+        const newPassword = this.newPassword.value;
+        
+        const res = await fetch(`/api/auth/change-password`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ studentId, oldPassword, newPassword })
+        });
+        
+        const result = await res.json();
+        
+        if (res.ok) {
+          // Success animation
+          submitBtn.innerHTML = '<span class="material-icons">check</span> Updated!';
+          submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+          
+          setTimeout(() => {
+            this.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+          }, 1500);
+        } else {
+          alert(result.message || 'Failed to update password');
+        }
+      } catch (error) {
+        console.error('Error changing password:', error);
+        alert('An error occurred while changing password');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    };
+
+    // Update Email
+    document.getElementById('update-email-form').onsubmit = async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Updating...';
+      submitBtn.disabled = true;
+      
+      try {
+        const newEmail = this.newEmail.value;
+        
+        const res = await fetch(`/api/students/${studentId}`, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ email: newEmail })
+        });
+        
+        if (res.ok) {
+          localStorage.setItem('userEmail', newEmail);
+          
+          // Update display
+          document.getElementById('current-email').textContent = newEmail;
+          document.getElementById('profile-email').innerText = newEmail;
+          
+          // Success animation
+          submitBtn.innerHTML = '<span class="material-icons">check</span> Updated!';
+          submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+          
+          setTimeout(() => {
+            this.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+          }, 1500);
+        } else {
+          alert('Failed to update email');
+        }
+      } catch (error) {
+        console.error('Error updating email:', error);
+        alert('An error occurred while updating email');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    };
+
+    // Delete Account
+    document.getElementById('delete-account-btn').onclick = async function() {
+      if (!confirm('Are you sure you want to delete your account? This action cannot be undone and will permanently remove all your data.')) return;
+      
+      const submitBtn = this;
+      const originalText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.innerHTML = '<span class="spinner"></span> Deleting...';
+      submitBtn.disabled = true;
+      
+      try {
+        const res = await fetch(`/api/students/${studentId}`, { method: 'DELETE' });
+        
+        if (res.ok) {
+          // Success animation
+          submitBtn.innerHTML = '<span class="material-icons">check</span> Deleted!';
+          submitBtn.style.background = 'linear-gradient(135deg, var(--success-500), var(--success-600))';
+          
+          setTimeout(() => {
+            localStorage.clear();
+            window.location.href = 'signup.html';
+          }, 1500);
+        } else {
+          alert('Failed to delete account');
+        }
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        alert('An error occurred while deleting account');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+      }
+    };
+
+    // Show home by default
+    document.getElementById('home').style.display = 'block';
+  </script>
+   <script src="script.js"></script>
+</body>
+</html>

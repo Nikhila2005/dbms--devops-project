@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Placement Management System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>
+      <span class="material-icons" style="font-size: 2.5rem; margin-right: 0.5rem; vertical-align: middle;">work</span>
+      Placement Management System
+    </h1>
+    <p style="margin: 1rem 0 0 0; font-size: 1.1rem; opacity: 0.9;">Connecting Students with Opportunities</p>
+  </header>
+  
+  <main>
+    <section class="card">
+      <h2>
+        <span class="material-icons" style="font-size: 2rem; margin-right: 0.5rem; vertical-align: middle;">school</span>
+        Welcome to the Portal
+      </h2>
+      <p style="color: var(--gray-600); margin-bottom: 2rem; font-size: 1.1rem;">
+        Choose your role to get started with the placement process
+      </p>
+      
+      <div class="buttons home-buttons">
+        <a href="signup.html" class="btn big-btn">
+          <span class="material-icons">person_add</span>
+          Student Sign Up
+        </a>
+        <a href="signin.html" class="btn big-btn">
+          <span class="material-icons">login</span>
+          Student Sign In
+        </a>
+        <a href="company-login.html" class="btn big-btn">
+          <span class="material-icons">business</span>
+          Company Sign In
+        </a>
+        <a href="company-signup.html" class="btn big-btn">
+          <span class="material-icons">business_center</span>
+          Company Sign Up
+        </a>
+      </div>
+    </section>
+    
+    <section class="card" style="margin-top: 2rem; background: linear-gradient(135deg, var(--primary-50), var(--gray-50));">
+      <h3 style="color: var(--primary-700); margin-bottom: 1rem;">
+        <span class="material-icons" style="font-size: 1.5rem; margin-right: 0.5rem; vertical-align: middle;">info</span>
+        How it Works
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: left;">
+        <div style="padding: 1rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+          <span class="material-icons" style="color: var(--primary-500); font-size: 2rem; display: block; margin-bottom: 0.5rem;">person</span>
+          <h4 style="margin: 0 0 0.5rem 0; color: var(--gray-800);">Students</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--gray-600);">Sign up, browse companies, and apply for placement drives</p>
+        </div>
+        <div style="padding: 1rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+          <span class="material-icons" style="color: var(--primary-500); font-size: 2rem; display: block; margin-bottom: 0.5rem;">business</span>
+          <h4 style="margin: 0 0 0.5rem 0; color: var(--gray-800);">Companies</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--gray-600);">Create drives, review applications, and manage selections</p>
+        </div>
+        <div style="padding: 1rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+          <span class="material-icons" style="color: var(--primary-500); font-size: 2rem; display: block; margin-bottom: 0.5rem;">trending_up</span>
+          <h4 style="margin: 0 0 0.5rem 0; color: var(--gray-800);">Success</h4>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--gray-600);">Track your progress and get placed in your dream company</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

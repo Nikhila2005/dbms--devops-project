@@ -1,0 +1,12 @@
+{
+  "name": "placement-management-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Placement Management System",
+  "scripts": {
+    "start": "echo 'Frontend files are static. Serve them with a web server or use the backend server.'",
+    "build": "echo 'No build process needed for static files.'"
+  },
+  "keywords": ["placement", "management", "frontend"],
+  "author": "",
+  "license": "MIT"
+}

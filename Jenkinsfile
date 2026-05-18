@@ -6,6 +6,11 @@ pipeline {
     }
 
     environment {
+
+        // Sonar Scanner tool name from Jenkins
+        SCANNER_HOME = tool 'sonar-scanner'
+
+        // Docker image
         IMAGE_NAME = "nikhila2005/nodeapp"
     }
 
@@ -13,54 +18,67 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
+
                 git branch: 'main',
                 url: 'https://github.com/Nikhila2005/dbms--devops-project.git'
+
             }
         }
 
         stage('Install Dependencies') {
+
             steps {
+
                 bat 'npm install'
+
             }
         }
 
         stage('SonarQube Scan') {
+
             steps {
 
                 withSonarQubeEnv('Sonar') {
 
-                    bat '''
-                    sonar-scanner
-                    '''
+                    bat """
+                    %SCANNER_HOME%\\bin\\sonar-scanner.bat
+                    """
+
                 }
             }
         }
 
         stage('OWASP Dependency Check') {
+
             steps {
 
                 dependencyCheck(
                     odcInstallation: 'OWASP',
                     additionalArguments: '--scan .'
                 )
+
             }
         }
 
         stage('Build Node App') {
+
             steps {
 
                 bat '''
                 npm run build
                 '''
+
             }
         }
 
         stage('Build Docker Image') {
+
             steps {
 
                 bat '''
                 docker build -t %IMAGE_NAME% .
                 '''
+
             }
         }
 
@@ -70,9 +88,9 @@ pipeline {
 
                 withCredentials([
                     usernamePassword(
-                    credentialsId: 'dockerhub',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS'
+                        credentialsId: 'dockerhub',
+                        usernameVariable: 'USER',
+                        passwordVariable: 'PASS'
                     )
                 ]) {
 
@@ -83,8 +101,24 @@ pipeline {
 
                     docker logout
                     '''
+
                 }
             }
+        }
+    }
+
+    post {
+
+        success {
+
+            echo 'Pipeline completed successfully'
+
+        }
+
+        failure {
+
+            echo 'Pipeline failed'
+
         }
     }
 }

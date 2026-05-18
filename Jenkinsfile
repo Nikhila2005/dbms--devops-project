@@ -6,21 +6,28 @@ pipeline {
     }
 
     environment {
+
+        // Docker image
         IMAGE_NAME = "nikhila2005/nodeapp"
+
     }
 
     stages {
 
         stage('Clone Repository') {
             steps {
+
                 git branch: 'main',
                     url: 'https://github.com/Nikhila2005/dbms--devops-project.git'
+
             }
         }
 
         stage('Install Dependencies') {
             steps {
+
                 bat 'npm install'
+
             }
         }
 
@@ -37,23 +44,24 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency Check') {
+        stage('Trivy File System Scan') {
             steps {
 
-                dependencyCheck(
-                    odcInstallation: 'OWASP',
-                    additionalArguments: '--scan . --format XML --format HTML'
-                )
+                bat '''
+                trivy fs . --format table > trivy-report.txt
+                '''
 
             }
         }
 
-        stage('Publish OWASP Report') {
+        stage('Archive Trivy Report') {
             steps {
 
-                dependencyCheckPublisher(
-                    pattern: '**/dependency-check-report.xml'
+                archiveArtifacts(
+                    artifacts: 'trivy-report.txt',
+                    fingerprint: true
                 )
+
             }
         }
 
@@ -63,6 +71,7 @@ pipeline {
                 bat '''
                 npm run build || exit 0
                 '''
+
             }
         }
 
@@ -72,6 +81,7 @@ pipeline {
                 bat '''
                 docker build -t %IMAGE_NAME% .
                 '''
+
             }
         }
 
@@ -94,6 +104,7 @@ pipeline {
 
                     docker logout
                     '''
+
                 }
             }
         }
@@ -102,11 +113,24 @@ pipeline {
     post {
 
         success {
+
             echo 'Pipeline completed successfully'
+
         }
 
         failure {
+
             echo 'Pipeline failed'
+
+        }
+
+        always {
+
+            archiveArtifacts(
+                artifacts: 'trivy-report.txt',
+                allowEmptyArchive: true
+            )
+
         }
     }
 }

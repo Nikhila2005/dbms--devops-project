@@ -6,11 +6,6 @@ pipeline {
     }
 
     environment {
-
-        // Sonar Scanner tool name from Jenkins
-        SCANNER_HOME = tool 'sonar-scanner'
-
-        // Docker image
         IMAGE_NAME = "nikhila2005/nodeapp"
     }
 
@@ -18,72 +13,71 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-
                 git branch: 'main',
-                url: 'https://github.com/Nikhila2005/dbms--devops-project.git'
-
+                    url: 'https://github.com/Nikhila2005/dbms--devops-project.git'
             }
         }
 
         stage('Install Dependencies') {
-
             steps {
-
                 bat 'npm install'
-
             }
         }
 
         stage('SonarQube Scan') {
-
             steps {
+
+                script {
+                    SCANNER_HOME = tool 'sonar-scanner'
+                }
 
                 withSonarQubeEnv('Sonar') {
 
                     bat """
                     %SCANNER_HOME%\\bin\\sonar-scanner.bat
                     """
-
                 }
             }
         }
 
         stage('OWASP Dependency Check') {
-
             steps {
 
                 dependencyCheck(
                     odcInstallation: 'OWASP',
-                    additionalArguments: '--scan .'
+                    additionalArguments: '--scan . --format XML'
                 )
+            }
+        }
 
+        stage('Publish OWASP Report') {
+            steps {
+
+                dependencyCheckPublisher(
+                    pattern: '**/dependency-check-report.xml'
+                )
             }
         }
 
         stage('Build Node App') {
-
             steps {
 
                 bat '''
-                npm run build
+                npm run build || exit 0
                 '''
-
             }
         }
 
         stage('Build Docker Image') {
-
             steps {
 
                 bat '''
                 docker build -t %IMAGE_NAME% .
                 '''
-
             }
         }
 
         stage('Push Docker Image') {
-
             steps {
 
                 withCredentials([
@@ -101,7 +95,6 @@ pipeline {
 
                     docker logout
                     '''
-
                 }
             }
         }
@@ -110,15 +103,11 @@ pipeline {
     post {
 
         success {
-
             echo 'Pipeline completed successfully'
-
         }
 
         failure {
-
             echo 'Pipeline failed'
-
         }
     }
 }

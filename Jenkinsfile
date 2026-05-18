@@ -13,18 +13,14 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-
                 git branch: 'main',
                     url: 'https://github.com/Nikhila2005/dbms--devops-project.git'
-
             }
         }
 
         stage('Install Dependencies') {
             steps {
-
                 bat 'npm install'
-
             }
         }
 
@@ -41,13 +37,32 @@ pipeline {
             }
         }
 
+        stage('OWASP Dependency Check') {
+            steps {
+
+                dependencyCheck(
+                    odcInstallation: 'OWASP',
+                    additionalArguments: '--scan . --format XML --format HTML'
+                )
+
+            }
+        }
+
+        stage('Publish OWASP Report') {
+            steps {
+
+                dependencyCheckPublisher(
+                    pattern: '**/dependency-check-report.xml'
+                )
+            }
+        }
+
         stage('Build Node App') {
             steps {
 
                 bat '''
                 npm run build || exit 0
                 '''
-
             }
         }
 
@@ -57,7 +72,6 @@ pipeline {
                 bat '''
                 docker build -t %IMAGE_NAME% .
                 '''
-
             }
         }
 
@@ -80,7 +94,6 @@ pipeline {
 
                     docker logout
                     '''
-
                 }
             }
         }

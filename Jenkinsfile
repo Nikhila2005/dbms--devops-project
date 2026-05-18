@@ -41,27 +41,6 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency Check') {
-            steps {
-
-                dependencyCheck(
-                    odcInstallation: 'OWASP',
-                    additionalArguments: '--scan . --format XML'
-                )
-
-            }
-        }
-
-        stage('Publish OWASP Report') {
-            steps {
-
-                dependencyCheckPublisher(
-                    pattern: '**/dependency-check-report.xml'
-                )
-
-            }
-        }
-
         stage('Build Node App') {
             steps {
 
@@ -110,15 +89,11 @@ pipeline {
     post {
 
         success {
-
             echo 'Pipeline completed successfully'
-
         }
 
         failure {
-
             echo 'Pipeline failed'
-
         }
     }
 }

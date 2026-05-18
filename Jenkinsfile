@@ -6,10 +6,7 @@ pipeline {
     }
 
     environment {
-
-        // Docker image
         IMAGE_NAME = "nikhila2005/nodeapp"
-
     }
 
     stages {
@@ -48,7 +45,7 @@ pipeline {
             steps {
 
                 bat '''
-                trivy fs . --format table > trivy-report.txt
+                "C:\\Users\\nikhi\\AppData\\Local\\Microsoft\\WinGet\\Packages\\AquaSecurity.Trivy_Microsoft.Winget.Source_8wekyb3d8bbwe\\trivy.exe" fs . --format table > trivy-report.txt
                 '''
 
             }

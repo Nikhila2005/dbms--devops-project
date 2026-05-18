@@ -13,29 +13,30 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
+
                 git branch: 'main',
                     url: 'https://github.com/Nikhila2005/dbms--devops-project.git'
+
             }
         }
 
         stage('Install Dependencies') {
             steps {
+
                 bat 'npm install'
+
             }
         }
 
         stage('SonarQube Scan') {
             steps {
 
-                script {
-                    SCANNER_HOME = tool 'sonar-scanner'
-                }
-
                 withSonarQubeEnv('Sonar') {
 
                     bat """
-                    %SCANNER_HOME%\\bin\\sonar-scanner.bat
+                    ${tool('sonar-scanner')}\\bin\\sonar-scanner.bat
                     """
+
                 }
             }
         }
@@ -47,6 +48,7 @@ pipeline {
                     odcInstallation: 'OWASP',
                     additionalArguments: '--scan . --format XML'
                 )
+
             }
         }
 
@@ -56,6 +58,7 @@ pipeline {
                 dependencyCheckPublisher(
                     pattern: '**/dependency-check-report.xml'
                 )
+
             }
         }
 
@@ -65,6 +68,7 @@ pipeline {
                 bat '''
                 npm run build || exit 0
                 '''
+
             }
         }
 
@@ -74,10 +78,12 @@ pipeline {
                 bat '''
                 docker build -t %IMAGE_NAME% .
                 '''
+
             }
         }
 
         stage('Push Docker Image') {
+
             steps {
 
                 withCredentials([
@@ -95,6 +101,7 @@ pipeline {
 
                     docker logout
                     '''
+
                 }
             }
         }
@@ -103,11 +110,15 @@ pipeline {
     post {
 
         success {
+
             echo 'Pipeline completed successfully'
+
         }
 
         failure {
+
             echo 'Pipeline failed'
+
         }
     }
 }

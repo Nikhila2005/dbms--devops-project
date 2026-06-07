@@ -1,5 +1,5 @@
 # Placement Management System
-#testing now for exam
+#testing now for exam 1
 
 A full-stack application for managing student placements and company drives.
 

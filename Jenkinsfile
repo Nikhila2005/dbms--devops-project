@@ -115,7 +115,7 @@ pipeline {
                 ]) {
                     bat '''
                         echo "Triggering Render Deployment..."
-                        curl -X POST "$HOOK"
+                        curl -X POST "%HOOK%"
                     '''
                 }
             }

@@ -113,7 +113,7 @@ pipeline {
                         variable: 'HOOK'
                     )
                 ]) {
-                    sh '''
+                    bat '''
                         echo "Triggering Render Deployment..."
                         curl -X POST "$HOOK"
                     '''

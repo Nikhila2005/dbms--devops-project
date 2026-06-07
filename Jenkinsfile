@@ -105,6 +105,21 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Render') {
+            steps {
+                withCredentials([
+                    string(
+                        credentialsId: 'RENDER_HOOK',
+                        variable: 'HOOK'
+                    )
+                ]) {
+                    sh '''
+                        echo "Triggering Render Deployment..."
+                        curl -X POST "$HOOK"
+                    '''
+                }
+            }
+         }
     }
 
     post {
